@@ -16,6 +16,15 @@ export default function Home() {
   const filteredProducts = productsList.filter(product =>
     product.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const handleDelete = (productId) => {
+    const newProducts = productsList.filter(product => product.id !== productId);
+    setProductsList(newProducts);
+    fetch(`https://api.escuelajs.co/api/v1/products/${productId}`, {
+      method: 'DELETE'
+    })
+      .then(response => response.json())
+      .catch(error => console.error('Error deleting product:', error));
+  }
   return (
     <>
         <NavbarComponent></NavbarComponent>
@@ -55,7 +64,7 @@ export default function Home() {
           </td>
           <td>
             <Button variant="primary">Edit</Button>
-            <Button variant="danger">Delete</Button>
+            <Button variant="danger" onClick={() => handleDelete(product.id)}>Delete</Button>
           </td>
         </tr>
         ))}
